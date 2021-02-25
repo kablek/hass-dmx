@@ -305,17 +305,17 @@ class DMXLight(LightEntity):
             return rgba
         elif self._type == CONF_LIGHT_TYPE_RGBAW:
             # Split the white component out from the scaled RGB values
-            scaled_rgb = scale_rgb_to_brightness(self._rgb, self._brightness)
-            values = color_rgb_to_rgbw(*scaled_rgb)
+            prergbaw = scale_rgb_to_brightness(self._rgb, self._brightness)
+            rgbaw = color_rgb_to_rgbw(*prergbaw)
             # color temp handling?
-            ww_fraction = (self._color_temp - self.min_mireds) / (
+            aww_fraction = (self._color_temp - self.min_mireds) / (
                            self.max_mireds - self.min_mireds)
-            cw_fraction = 1 - ww_fraction
-            max_fraction = max(ww_fraction, cw_fraction)
-            cold=self.is_on * self._brightness * (ww_fraction / max_fraction)
-            values.append(cold)
-            values[3]=self.is_on * self._brightness * (cw_fraction / max_fraction)
-            return values
+            acw_fraction = 1 - aww_fraction
+            amax_fraction = max(aww_fraction, acw_fraction)
+            cold=self.is_on * self._brightness * (aww_fraction / amax_fraction)
+            rgbaw.append(cold)
+            rgbaw[3]=self.is_on * self._brightness * (acw_fraction / amax_fraction)
+            return rgbaw
         elif self._type == CONF_LIGHT_TYPE_RGBW:
             rgbw = scale_rgb_to_brightness(self._rgb, self._brightness)
             rgbw.append(round(self._white_value * (self._brightness / 255)))
