@@ -121,7 +121,7 @@ FEATURE_MAP[CONF_LIGHT_TYPE_CUSTOM_WHITE] = (SUPPORT_BRIGHTNESS | SUPPORT_TRANSI
 COLOR_MAP[CONF_LIGHT_TYPE_DIMMER] = None
 COLOR_MAP[CONF_LIGHT_TYPE_RGB] = [255, 255, 255]
 COLOR_MAP[CONF_LIGHT_TYPE_RGBA] = [255, 255, 255]
-COLOR_MAP[CONF_LIGHT_TYPE_RGBAW] = [255, 255, 255, 255]
+COLOR_MAP[CONF_LIGHT_TYPE_RGBAW] = [255, 255, 255]
 COLOR_MAP[CONF_LIGHT_TYPE_RGBW] = [255, 255, 255]
 COLOR_MAP[CONF_LIGHT_TYPE_RGBW_AUTO] = [255, 255, 255]
 COLOR_MAP[CONF_LIGHT_TYPE_DRGB] = [255, 255, 255]
@@ -516,7 +516,7 @@ class DMXGateway(object):
                            send_immediately=True):
         original_values = self._channels[:]
         # Minimum of one frame for a snap transition
-        number_of_frames = max(int((transition*10) * (fps/10)), 1)
+        number_of_frames = max(int((transition) * (fps/10)), 1)
 
         # Single value for standard channels, RGB channels will have 3 or more
         value_arr = [value]
