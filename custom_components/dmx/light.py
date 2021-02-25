@@ -305,7 +305,7 @@ class DMXLight(LightEntity):
             return rgba
         elif self._type == CONF_LIGHT_TYPE_RGBAW:
             # Split the white component out from the scaled RGB values
-            prergbaw = scale_rgb_to_brightness(self._rgb, self._brightness)
+            rgbaw = scale_rgb_to_brightness(self._rgb, self._brightness)
             #rgbaw = color_rgb_to_rgbw(*prergbaw)
             rgbaw.append(round(self._white_value * (self._brightness / 255)))
             # color temp handling?
