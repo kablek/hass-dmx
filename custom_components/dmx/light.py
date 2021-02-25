@@ -104,7 +104,7 @@ FEATURE_MAP[CONF_LIGHT_TYPE_RGBA] = (SUPPORT_BRIGHTNESS | SUPPORT_TRANSITION |
 FEATURE_MAP[CONF_LIGHT_TYPE_RGBAW] = (SUPPORT_BRIGHTNESS | SUPPORT_TRANSITION |
                                      SUPPORT_COLOR | SUPPORT_WHITE_VALUE)
 FEATURE_MAP[CONF_LIGHT_TYPE_RGBW] = (SUPPORT_BRIGHTNESS | SUPPORT_TRANSITION |
-                                     SUPPORT_COLOR | SUPPORT_WHITE_VALUE)
+                                     SUPPORT_COLOR | SUPPORT_WHITE_VALUE | SUPPORT_COLOR_TEMP)
 FEATURE_MAP[CONF_LIGHT_TYPE_RGBW_AUTO] = (SUPPORT_BRIGHTNESS |
                                           SUPPORT_TRANSITION | SUPPORT_COLOR)
 FEATURE_MAP[CONF_LIGHT_TYPE_DRGB] = (SUPPORT_BRIGHTNESS | SUPPORT_TRANSITION |
@@ -266,6 +266,7 @@ class DMXLight(LightEntity):
         """Return the white value of this light between 0..255."""
         if ((self._type == CONF_LIGHT_TYPE_RGBW) or
             (self._type == CONF_LIGHT_TYPE_RGBWD) or
+            (self._type == CONF_LIGHT_TYPE_RGBAW) or
                 (self._type == CONF_LIGHT_TYPE_DRGBW)):
             return self._white_value
         else:
@@ -515,7 +516,7 @@ class DMXGateway(object):
                            send_immediately=True):
         original_values = self._channels[:]
         # Minimum of one frame for a snap transition
-        number_of_frames = max(int(transition * fps), 1)
+        number_of_frames = max(int((transition*10) * (fps/10)), 1)
 
         # Single value for standard channels, RGB channels will have 3 or more
         value_arr = [value]
