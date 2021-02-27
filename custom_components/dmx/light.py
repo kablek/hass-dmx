@@ -521,7 +521,7 @@ class DMXGateway(object):
                            send_immediately=True):
         original_values = self._channels[:]
         # Minimum of one frame for a snap transition
-        number_of_frames = max(int((transition) * (fps/10)), 1)
+        number_of_frames = max(int((transition) * (fps)), 1)
 
         # Single value for standard channels, RGB channels will have 3 or more
         value_arr = [value]
