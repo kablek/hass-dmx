@@ -546,7 +546,7 @@ class DMXGateway(object):
             if values_changed and send_immediately:
                 self.send()
 
-            yield from asyncio.sleep(1. / fps)
+            yield from asyncio.sleep(3. / fps)
 
     def get_channel_level(self, channel):
         """
