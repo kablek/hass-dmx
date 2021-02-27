@@ -149,9 +149,9 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
             vol.Optional(CONF_DEFAULT_COLOR): vol.All(
                 vol.ExactSequence((cv.byte, cv.byte, cv.byte)),
                 vol.Coerce(tuple)),
-            vol.Optional(CONF_TRANSITION, default=0): vol.All(vol.Coerce(int),
-                                                              vol.Range(min=0,
-                                                              max=60)),
+            vol.Optional(CONF_TRANSITION, default=0.0): vol.All(vol.Coerce(float),
+                                                              vol.Range(min=0.0,
+                                                              max=60.0)),
             vol.Optional(CONF_CHANNEL_SETUP): cv.string,
         }
     ]),
@@ -306,19 +306,18 @@ class DMXLight(LightEntity):
         elif self._type == CONF_LIGHT_TYPE_RGBAW:
             # Split the white component out from the scaled RGB values
             scaled_rgb = scale_rgb_to_brightness(self._rgb, self._brightness)
-            scaled_rgbw = color_rgb_to_rgbw(*scaled_rgb)
+            scaled_rgbw = list(color_rgb_to_rgbw(*scaled_rgb))
             #rgbaw = color_rgb_to_rgbw(*prergbaw)
             #rgbaw.append(round(self._white_value * (self._brightness / 255)))
             # color temp handling?
             white = scaled_rgbw[3]
-            kurac = list(scaled_rgbw)
             aww_fraction = (self._color_temp - self.min_mireds) / (
                            self.max_mireds - self.min_mireds)
             acw_fraction = 1 - aww_fraction
             amax_fraction = max(aww_fraction, acw_fraction)
-            kurac[3] = self.is_on * white * (aww_fraction / amax_fraction)
-            kurac.append(self.is_on * white * (acw_fraction / amax_fraction))
-            return kurac
+            scaled_rgbw[3] = self.is_on * white * (aww_fraction / amax_fraction)
+            scaled_rgbw.append(self.is_on * white * (acw_fraction / amax_fraction))
+            return scaled_rgbw
         elif self._type == CONF_LIGHT_TYPE_RGBW:
             rgbw = scale_rgb_to_brightness(self._rgb, self._brightness)
             rgbw.append(round(self._white_value * (self._brightness / 255)))
@@ -546,7 +545,7 @@ class DMXGateway(object):
             if values_changed and send_immediately:
                 self.send()
 
-            yield from asyncio.sleep(0.1 / fps)
+            yield from asyncio.sleep(3.0 / fps)
 
     def get_channel_level(self, channel):
         """
