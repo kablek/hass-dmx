@@ -520,7 +520,7 @@ class DMXGateway(object):
     @asyncio.coroutine
     def set_channels_async(self, channels, value, transition=0.0, fps=40,
                            send_immediately=True):
-        if(are_there_workers):
+        if are_there_workers:
             amImaster = False
         else:
             amImaster = True
@@ -553,7 +553,7 @@ class DMXGateway(object):
                 self.send()
 
             yield from asyncio.sleep(1.0 / fps)
-        if(amImaster):
+        ifamImaster:
             are_there_workers = False
 
     def get_channel_level(self, channel):
