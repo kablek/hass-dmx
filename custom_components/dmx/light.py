@@ -45,6 +45,8 @@ import voluptuous as vol
 
 _LOGGER = logging.getLogger(__name__)
 
+are_there_workers = False
+
 DATA_ARTNET = 'light_dmx'
 
 CONF_CHANNEL = 'channel'
@@ -518,6 +520,11 @@ class DMXGateway(object):
     @asyncio.coroutine
     def set_channels_async(self, channels, value, transition=0.0, fps=20,
                            send_immediately=True):
+        if(are_there_workers)
+            amImaster = False
+        else
+            amImaster = True
+            are_there_workers = True
         original_values = self._channels[:]
         # Minimum of one frame for a snap transition
         number_of_frames = max(int((transition) * (fps)), 1)
@@ -542,10 +549,12 @@ class DMXGateway(object):
                     self._channels[channel - 1] = next_value
                     values_changed = True
 
-            if values_changed and send_immediately:
+            if values_changed and send_immediately and amImaster:
                 self.send()
 
             yield from asyncio.sleep(1.0 / fps)
+        if(amImaster)
+            are_there_workers = False
 
     def get_channel_level(self, channel):
         """
