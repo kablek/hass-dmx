@@ -516,7 +516,7 @@ class DMXGateway(object):
             self.send()
 
     @asyncio.coroutine
-    def set_channels_async(self, channels, value, transition=0.0, fps=40,
+    def set_channels_async(self, channels, value, transition=0.0, fps=20,
                            send_immediately=True):
         original_values = self._channels[:]
         # Minimum of one frame for a snap transition
