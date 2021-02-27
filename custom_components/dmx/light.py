@@ -228,6 +228,7 @@ class DMXLight(LightEntity):
         # Send default levels to the controller
         self._dmx_gateway.set_channels(self._channels, self.dmx_values,
                                        send_immediately)
+        are_there_workers = False
 
         _LOGGER.debug(f"Intialized DMX light {self._name}")
 
