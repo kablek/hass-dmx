@@ -553,7 +553,7 @@ class DMXGateway(object):
                 self.send()
 
             yield from asyncio.sleep(1.0 / fps)
-        ifamImaster:
+        if amImaster:
             are_there_workers = False
 
     def get_channel_level(self, channel):
